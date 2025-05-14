@@ -1,0 +1,7 @@
+fastapi==0.111.0
+uvicorn
+openai==1.55.3
+python-dotenv==1.0.1
+python-multipart
+pdf2image 
+pillow
