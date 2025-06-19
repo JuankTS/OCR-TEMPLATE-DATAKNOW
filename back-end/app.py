@@ -6,9 +6,8 @@ import base64
 from pdf2image import convert_from_bytes
 from core.schemas import ResponseHTTPChat
 from core.utils import genereta_id
-from model.inference import run
 from io import BytesIO
-from model.inference_pdf import run_pdf
+from model.model_extration import run_pdf, run
 
 app = FastAPI()
 

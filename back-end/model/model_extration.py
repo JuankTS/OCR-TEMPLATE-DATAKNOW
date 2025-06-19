@@ -40,7 +40,7 @@ def request_openai(msgs: list, max_tokens: int = 8192) -> str:
     except Exception as e:
         response_str = f"Error al consultar OpenAI: {str(e)}"  # <-- CAMBIO AQUÍ
     return response_str
-    
+
 def run_pdf(image_data_urls: list) -> str:
     system_buildings = """Eres un asistente que analiza imágenes. Extrae los detalles importantes del contenido de cada cada imagen y devuélvelos en varios párrafo en español. 
     Haz una analisis por pagina.
@@ -70,5 +70,29 @@ def run_pdf(image_data_urls: list) -> str:
 
     # pattern = r'(```.*?[\s\S]*?```)'
 
+    # result = re.sub(pattern, r'<code>\1</code>', response)
+    return response
+
+def run(image_data_url: str) -> str:
+    system_buildings = """
+    Eres un modelo analizador de imagenes, tu tarea es recibir la iamgen y dar informacion de lo que en ella hay, describirla, haciendo observaciones, proporciona informacion de lo que en la imagen se encuentre
+    """
+
+    messages = [
+        {"role": "system", "content": system_buildings },
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": image_data_url
+                    }
+                }
+            ]
+        }
+    ]
+    response = request_openai(messages)
+    pattern = r'(```.*?[\s\S]*?```)'
     # result = re.sub(pattern, r'<code>\1</code>', response)
     return response
