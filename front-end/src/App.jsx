@@ -1,9 +1,17 @@
-"use client"
+//Este bloque de código es parte de una aplicación React que permite a los usuarios subir imágenes o archivos PDF para procesarlos mediante OCR (Reconocimiento Óptico de Caracteres).
+/*
+Aqui se define un componente y funciones de página que maneja la carga de archivos, el procesamiento de imágenes y la visualización de resultados.
+*/
 
+
+"use client"
+// Importaciones necesarias
 import { useState, useRef } from "react"
 import { requestAttachment } from "./api";
 
+// Componente principal de la página OCR
 export default function OCRPage() {
+  // Estados para manejar archivos, resultados y estado de procesamiento
   const [files, setFiles] = useState([])
   const [results, setResults] = useState([])
   const [showResults, setShowResults] = useState(false)
@@ -18,7 +26,6 @@ export default function OCRPage() {
   const acceptedFiles = newFiles.filter(file =>
     file.type.startsWith("image/") || file.type === "application/pdf"
   )
-
   setFiles(prev => [...prev, ...acceptedFiles])
 }
 
@@ -35,7 +42,7 @@ export default function OCRPage() {
   }
 
   // Procesar las imágenes
-  async function processImages() {
+  async function processDocs() {
     if (files.length === 0) {
       alert("Por favor, sube al menos un archivo para procesar.")
       return
@@ -69,6 +76,10 @@ export default function OCRPage() {
     setShowResults(false)
   }
 
+
+  /*
+  Aca se definen los estilos para los botones.
+  */
   // Estilos para los botones
   const buttonStyle = {
     padding: "10px 20px",
@@ -90,26 +101,47 @@ export default function OCRPage() {
     color: "#310380"
   }
 
+  /**
+   * Renderizado principal del componente.
+   * Muestra:
+   * - Fondo visual
+   * - Formulario para carga de archivos
+   * - Resultados OCR si ya se procesaron
+   */
   return (
+    // Contenedor principal con fondo y estilo
+    <div style={{position: "relative", minHeight: "100vh"}}>
+    {/*Este div se usa para establecer un fondo de imagen que cubre toda la pantalla*/}
     <div
     style={{
-      position: "fixed",         // Ocupará toda la ventana
+      position: "fixed",
       top: 0,
       left: 0,
       width: "100%",
       height: "100%",
-      backgroundImage: "url('Img/Oficina 6.jpeg')", // Ruta de la imagen
+      backgroundImage: "url('/Img/Oficina 6.jpeg')",
       backgroundSize: "cover",
       backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      zIndex: -1                 // Para que esté detrás del contenido
-    }}>
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px", position: "relative", zIndex: 1, }}>
+      zIndex: -1,
+    }}/>
+    {/*Este div muestra el contenido de la lista de imagenes a procesar y los resultados*/}
+    <div style={{ position: "relative", zIndex: 1, padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
+    {/* Encabezado de la página */}
       <h1 style={{ marginBottom: "20px", color: "white", textAlign: "center", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)"}}>Procesamiento OCR de Imágenes</h1>
 
+      {/* Condicional para mostrar resultados o pantalla de carga */}
       {showResults ? (
         // Pantalla de resultados
-        <div>
+        <div
+          style={{
+            border: "2px dashed #A87FF0",
+            borderRadius: "8px",
+            padding: "40px",
+            textAlign: "center",
+            marginBottom: "20px",
+            backgroundColor: "#f9f9f9",
+          }}
+        >
           <button
             onClick={goBack}
             style={{
@@ -124,7 +156,7 @@ export default function OCRPage() {
           >
             <span>←</span> Volver
           </button>
-
+          {/* Título de resultados */}
           <h2 style={{color:"white", textAlign: "center", fontSize:"35px", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)"}}>Resultados OCR</h2>
 
           {results.map((result, index) => (
@@ -283,14 +315,14 @@ export default function OCRPage() {
                         e.target.style.backgroundColor = "#310380"
                       }}
                     >
-                      --
+                      X
                     </button>
                   </div>
                 ))}
               </div>
               {/* Botón de procesar*/}
               <button
-                onClick={processImages}
+                onClick={processDocs}
                 disabled={isProcessing}
                 style={{
                   ...buttonStyle,
