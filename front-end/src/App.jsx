@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
+import { requestAttachment } from "./api";
 
 export default function OCRPage() {
   const [files, setFiles] = useState([])
@@ -10,12 +11,16 @@ export default function OCRPage() {
   const fileInputRef = useRef(null)
 
   // Manejar la carga de archivos
-  function handleFileUpload(event) {
-    if (event.target.files) {
-      const newFiles = Array.from(event.target.files)
-      setFiles([...files, ...newFiles])
-    }
-  }
+  const handleFileUpload = (event) => {
+  const newFiles = Array.from(event.target.files || [])
+
+  // Filtrar solo imágenes o PDFs
+  const acceptedFiles = newFiles.filter(file =>
+    file.type.startsWith("image/") || file.type === "application/pdf"
+  )
+
+  setFiles(prev => [...prev, ...acceptedFiles])
+}
 
   // Función para activar el input de archivos
   function triggerFileInput() {
@@ -30,7 +35,7 @@ export default function OCRPage() {
   }
 
   // Procesar las imágenes
-  function processImages() {
+  async function processImages() {
     if (files.length === 0) {
       alert("Por favor, sube al menos un archivo para procesar.")
       return
@@ -38,17 +43,25 @@ export default function OCRPage() {
 
     setIsProcessing(true)
 
-    // Simulación de procesamiento OCR
-    setTimeout(() => {
-      const mockResults = files.map((file) => ({
-        fileName: file.name,
-        text: `Texto extraído de ${file.name}. En una aplicación real, esto sería el texto extraído de la imagen.`,
-      }))
+    // Procesando imagen
+    try {
+  // Procesa cada archivo y obtiene los resultados reales
+      const results = await Promise.all(
+        files.map(async (file) => {
+          const res = await requestAttachment(file);
+          return {
+            fileName: file.name,
+            text: res.text, 
+          };
+        })
+      );
 
-      setResults(mockResults)
-      setShowResults(true)
-      setIsProcessing(false)
-    }, 1500)
+      setResults(results);
+      setShowResults(true);
+    } catch (error) {
+      alert("Error al procesar imágenes: " + error.message);
+    }
+    setIsProcessing(false);
   }
 
   // Volver a la pantalla de carga
@@ -152,14 +165,14 @@ export default function OCRPage() {
               backgroundColor: "#f9f9f9",
             }}
           >
-            <h2 style={{ marginBottom: "10px", color:"#A87FF0"}}>Subir Imágenes para OCR</h2>
-            <p style={{ marginBottom: "25px", color: "#A87FF0"}}>Sube imágenes para extraer texto usando OCR</p>
+            <h2 style={{ marginBottom: "10px", color:"#A87FF0"}}>Subir archivos para OCR</h2>
+            <p style={{ marginBottom: "25px", color: "#A87FF0"}}>Sube imágenes o PDFs para procesarlos usando OCR</p>
 
             {/* Input de archivo oculto */}
             <input
               type="file"
               multiple
-              accept="image/*"
+              accept="image/*,application/pdf"
               onChange={handleFileUpload}
               ref={fileInputRef}
               style={{ display: "none" }}
@@ -320,7 +333,7 @@ export default function OCRPage() {
                     Procesando...
                   </span>
                 ) : (
-                  "Procesar Imágenes"
+                  "Procesar Archivos"
                 )}
               </button>
             </div>

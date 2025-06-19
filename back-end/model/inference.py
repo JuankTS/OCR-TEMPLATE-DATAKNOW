@@ -5,10 +5,12 @@ from openai import AzureOpenAI
 
 dotenv.load_dotenv('.env')
 
+
 api_key = os.getenv("AZURE_OPENAI_API_KEY")
 endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
 deployment_name = os.getenv("MODEL_GPT_NAME")
 version = os.getenv("OPENAI_API_VERSION")
+
 
 client = AzureOpenAI(
     api_key = api_key,  
@@ -35,36 +37,19 @@ def request_openai(msgs: list, max_tokens: int = 500) -> str:
         )
         response_str = response.choices[0].message.content
     except Exception as e:
-        response_str = e
-    finally:
-        return response_str
+        response_str = f"Error al consultar OpenAI: {str(e)}"  # <-- CAMBIO AQUÍ
+    return response_str   
     
 def run(image_data_url: str) -> str:
-    system_buildings = """You are provided with an image of a invoice. Analyze the content of the image and extract the following details in JSON format:
-
-Invoice Number: The unique identifier for the bill.
-Date: The date when the invoice was issued.
-Total Amount: The total amount to be paid, including currency.
-Itemized Charges: A list of charges, each with the following:
-Item Name: The name or description of the item.
-Quantity: Number of units.
-Price per Unit: Cost per unit of the item.
-Total Item Cost: Total cost for the item (quantity * price per unit).
-Tax: Any tax information included in the invoice.
-Billing Address: The address of the person or company receiving the invoice.
-Payment Due Date: The deadline to make the payment.
-
-Please return the extracted data in a well-structured JSON format, ensuring that all relevant details from the bill are captured. respond in Spanish always."""
+    system_buildings = """
+    Eres un modelo analizador de imagenes, tu tarea es recibir la iamgen y dar informacion de lo que en ella hay, describirla, haciendo observaciones, proporciona informacion de lo que en la imagen se encuentre
+    """
 
     messages = [
         {"role": "system", "content": system_buildings },
         {
             "role": "user",
             "content": [
-                {
-                    "type": "text",
-                    "text": "Here is my invoice"
-                },
                 {
                     "type": "image_url",
                     "image_url": {
@@ -76,5 +61,5 @@ Please return the extracted data in a well-structured JSON format, ensuring that
     ]
     response = request_openai(messages)
     pattern = r'(```.*?[\s\S]*?```)'
-    result = re.sub(pattern, r'<code>\1</code>', response)
-    return result
+    # result = re.sub(pattern, r'<code>\1</code>', response)
+    return response

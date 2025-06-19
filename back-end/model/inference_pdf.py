@@ -2,13 +2,16 @@ import os
 import re
 import dotenv
 from openai import AzureOpenAI
+import pdb 
 
 dotenv.load_dotenv('.env')
+
 
 api_key = os.getenv("AZURE_OPENAI_API_KEY")
 endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
 deployment_name = os.getenv("MODEL_GPT_NAME")
 version = os.getenv("OPENAI_API_VERSION")
+
 
 client = AzureOpenAI(
     api_key = api_key,  
@@ -35,9 +38,8 @@ def request_openai(msgs: list, max_tokens: int = 8192) -> str:
         )
         response_str = response.choices[0].message.content
     except Exception as e:
-        response_str = e
-    finally:
-        return response_str
+        response_str = f"Error al consultar OpenAI: {str(e)}"  # <-- CAMBIO AQUÍ
+    return response_str
     
 def run_pdf(image_data_urls: list) -> str:
     system_buildings = """Eres un asistente que analiza imágenes. Extrae los detalles importantes del contenido de cada cada imagen y devuélvelos en varios párrafo en español. 

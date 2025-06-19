@@ -26,7 +26,8 @@ class ImageData(BaseModel):
 async def read_main(in_file: UploadFile = File(...)):
     image_bytes = await in_file.read()
     encoded_image = base64.b64encode(image_bytes).decode("utf-8")
-    base64_image = f"data:image/png;base64,{encoded_image}"
+    mime_type = in_file.content_type or "image/png"  # fallback
+    base64_image = f"data:{mime_type};base64,{encoded_image}"
     response = {
         "id": genereta_id(),
         "text": run(base64_image)
