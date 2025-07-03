@@ -1,0 +1,165 @@
+    /* Fondo general */
+    body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f0f0f0;
+    }
+
+    /* Contenedor principal centrado */
+    .ocr-container {
+    position: relative;
+    min-height: 100vh;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    align-items: center;
+    z-index: 1;
+    }
+
+    /* Div Bonotes principales*/
+    .div-buttoms {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; 
+    margin-top: 10px;
+}
+    /* Encabezado */
+    .ocr-header {
+    margin-bottom: 20px;
+    color: white;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Sección de carga y resultados */
+    .ocr-box {
+    border: 2px dashed #A87FF0;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    }
+
+    /* Subtítulo */
+    .ocr-subtitle {
+    margin-bottom: 10px;
+    color: #A87FF0;
+    }
+
+    /* Texto de ayuda */
+    .ocr-description {
+    margin-bottom: 25px;
+    color: #A87FF0;
+    }
+
+    /* Botón base */
+    .ocr-button {
+    padding: 10px 20px;
+    background-color: #310380;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    margin-bottom: 25px;
+    text-align: center;
+    }
+
+    .ocr-button:hover {
+    background-color: #A87FF0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    color: #310380;
+    }
+
+    /* Lista de archivos */
+    .file-list {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    }
+
+    .file-item:nth-child(even) {
+    background-color: #f9f9f9;
+    }
+
+    .file-item:nth-child(odd) {
+    background-color: #fff;
+    }
+
+    .file-info {
+    display: flex;
+    align-items: center;
+    }
+
+    .file-name {
+    font-weight: bold;
+    color: #A87FF0;
+    }
+
+    .file-size {
+    margin-left: 8px;
+    font-size: 14px;
+    color: #A87FF0;
+    }
+
+    /* Botón de eliminar archivo */
+    .remove-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background-color: #310380;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    }
+
+    .remove-button:hover {
+    background-color: #A87FF0;
+    color: #310380;
+    }
+
+    /* Resultado OCR */
+    .result-section {
+    margin-bottom: 15px;
+    border: 2px dashed #A87FF0;
+    border-radius: 4px;
+    padding: 15px;
+    background-color: white;
+    }
+
+    .result-title {
+    color: #310380;
+    font-weight: bold;
+    }
+
+    .result-content {
+    background: #A87FF0;
+    padding: 10px;
+    border-radius: 4px;
+    color: white;
+    white-space: pre-wrap;
+    }
+
+    /* Animación spinner */
+    @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+    }
